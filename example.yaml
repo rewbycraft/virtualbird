@@ -1,0 +1,58 @@
+environment:
+  bridges:
+    - b1
+  birds:
+    r1:
+      interfaces:
+        - bridge: b1
+          addresses:
+            - 2a0b:6b83:1234::1/64
+      up:
+        - "ip addr show"
+      bird: |
+        router id 192.168.1.1;
+        protocol kernel {
+          ipv6 {
+            export all;
+          };
+        }
+        protocol device {
+          scan time 10;
+        }
+        protocol ospf v3 {
+          ipv6 {
+            import all;
+            export all;
+          };
+          area 0 {
+            interface "r1-eth0" {
+              type broadcast;
+            };
+          };
+        }
+    r2:
+      interfaces:
+        - bridge: b1
+          addresses:
+            - 2a0b:6b83:1234::2/64
+      bird: |
+        router id 192.168.1.2;
+        protocol kernel {
+          ipv6 {
+            export all;
+          };
+        }
+        protocol device {
+          scan time 10;
+        }
+        protocol ospf v3 {
+          ipv6 {
+            import all;
+            export all;
+          };
+          area 0 {
+            interface "r2-eth0" {
+              type broadcast;
+            };
+          };
+        }
