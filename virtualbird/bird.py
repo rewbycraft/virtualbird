@@ -129,10 +129,17 @@ class Bird(virtualbird.utils.UpDownAble):
             logging.info("Starting bird...")
             with open("/tmp/{}.conf".format(self.ns), 'w') as file:
                 file.write(self.birdconfig)
-            if self.run_command(['bird', '-c', "/tmp/{}.conf".format(self.ns), '-p']) == 0:
-                self.birdnsp = NSPopen(self.ns, ['bird', '-c', "/tmp/{}.conf".format(self.ns), '-f', '-s', "/tmp/{}.sock".format(self.ns), '-P', "/tmp/{}.pid".format(self.ns)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            check = self.run_command(['bird', '-c', "/tmp/{}.conf".format(self.ns), '-p'])
+            if check == 0:
+                self.birdnsp = NSPopen(self.ns, ['bird',
+                                                 '-c', "/tmp/{}.conf".format(self.ns),
+                                                 '-f',
+                                                 '-s', "/tmp/{}.sock".format(self.ns),
+                                                 '-P', "/tmp/{}.pid".format(self.ns)],
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
             else:
-                logging.warning("Not starting bird with invalid config")
+                logging.warning("Not starting bird with invalid config. (rc=%d)", check)
                 self.birdconfig = ""
         logging.info("Brought %s up!", self.name)
 
