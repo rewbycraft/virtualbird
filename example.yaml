@@ -6,7 +6,7 @@ environment:
       interfaces:
         - bridge: b1
           addresses:
-            - 2a0b:6b83:1234::1/64
+            - 2001:DB8::1/64
       up:
         - "ip addr show"
       bird: |
@@ -34,7 +34,7 @@ environment:
       interfaces:
         - bridge: b1
           addresses:
-            - 2a0b:6b83:1234::2/64
+            - 2001:DB8::2/64
       bird: |
         router id 192.168.1.2;
         protocol kernel {
