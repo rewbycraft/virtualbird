@@ -5,6 +5,7 @@ from pyroute2 import NetNS, IPDB, netns, NSPopen
 from typing import List
 import logging
 import subprocess
+import os
 
 
 class BirdInterface(virtualbird.utils.UpDownAble):
@@ -151,6 +152,12 @@ class Bird(virtualbird.utils.UpDownAble):
                 logging.warning("Bird was already dead.")
             except KeyboardInterrupt:
                 logging.warning("Bird was already dead.")
+            if os.path.exists("/tmp/{}.sock".format(self.ns)):
+                os.remove("/tmp/{}.sock".format(self.ns))
+            if os.path.exists("/tmp/{}.pid".format(self.ns)):
+                os.remove("/tmp/{}.pid".format(self.ns))
+            if os.path.exists("/tmp/{}.conf".format(self.ns)):
+                os.remove("/tmp/{}.conf".format(self.ns))
         for cmd in self.downcommands:
             self.run_command(['bash', '-c', cmd])
         for intf in self.interfaces:
